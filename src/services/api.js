@@ -54,5 +54,68 @@ export default {
     register: async (name, cpf, email, password, password_confirm) => {
         let json = await request('post', '/auth/register', {name, cpf, email, password, password_confirm});
         return json;
+    },
+    getWall: async () => {
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get', '/walls', {}, token);
+        return json;
+    },
+    likeWallPost: async (id) => {
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('post', `/wall/${id}/like`, {}, token);
+        return json;
+    },
+    getDoc: async () => {
+        let token = await AsyncStorage.getItem('token');
+        let json = await request('get', '/docs', {}, token);
+        return json;
+    },
+    getBillet: async () => {
+        let token = await AsyncStorage.getItem('token');
+        let property = await AsyncStorage.getItem('property');
+        property = JSON.parse(property);
+        let json = await request('get', '/billets', {
+            property: property.id
+        }, token);
+        return json;
+    },
+    getWarnings: async () => {
+        let token = await AsyncStorage.getItem('token');
+        let property = await AsyncStorage.getItem('property');
+        property = JSON.parse(property);
+        let json = await request('get', '/warnings', {
+            property: property.id
+        }, token);
+        return json;
+    },
+    addWarningFile: async (file) => {
+        let token = await AsyncStorage.getItem('token');
+        let formData = new FormData();
+        formData.append('photo', {
+            uri: file.uri,
+            type: file.type,
+            name: file.fileName
+        });
+        let req = await fetch(`${baseUrl}/warning/file`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+        let json = await req.json();
+        return json;
+    },
+    addWarning: async ({title, list}) => {
+        let token = await AsyncStorage.getItem('token');
+        let property = await AsyncStorage.getItem('property');
+        property = JSON.parse(property);
+        let json = await request('post', '/warning', {
+            title,
+            list,
+            property: property.id
+        }, token);
+        return json;
     }
 }

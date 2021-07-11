@@ -19,4 +19,7 @@ export default {
     List: styled.FlatList`
         flex: 1;
     `,
+    ButtonAdd: styled.TouchableOpacity`
+        margin-right: 15px;
+    `,
 }
