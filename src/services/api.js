@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const baseUrl = 'https://api.b7web.com.br/devcond/api';
+// const baseUrl = 'https://api.b7web.com.br/devcond/api';
+const baseUrl = 'http://127.0.0.1:8000/api';
 
 const request = async (method, endpoint, params, token = null) => {
     method = method.toLowerCase();
@@ -25,7 +26,6 @@ const request = async (method, endpoint, params, token = null) => {
     if(token) {
         headers.Authorization = `Bearer ${token}`;
     }
-
     let req = await fetch(fulUrl, { method, headers, body });
     let json = await req.json();
     return json;
@@ -107,7 +107,7 @@ export default {
         let json = await req.json();
         return json;
     },
-    addWarning: async ({title, list}) => {
+    addWarning: async (title, list) => {
         let token = await AsyncStorage.getItem('token');
         let property = await AsyncStorage.getItem('property');
         property = JSON.parse(property);
